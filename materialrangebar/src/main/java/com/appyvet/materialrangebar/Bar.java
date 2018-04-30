@@ -1,14 +1,14 @@
 /*
- * Copyright 2013, Edmodo, Inc. 
+ * Copyright 2013, Edmodo, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this work except in compliance with the License.
  * You may obtain a copy of the License in the LICENSE file, or at:
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" 
- * BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language 
- * governing permissions and limitations under the License. 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS"
+ * BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
  */
 
 package com.appyvet.materialrangebar;
@@ -41,6 +41,7 @@ public class Bar {
     private float mTickDistance;
 
     private final float mTickHeight;
+    private final float mTickWidth;
 
     // Constructor /////////////////////////////////////////////////////////////
 
@@ -48,25 +49,26 @@ public class Bar {
     /**
      * Bar constructor
      *
-     * @param ctx          the context
-     * @param x            the start x co-ordinate
-     * @param y            the y co-ordinate
-     * @param length       the length of the bar in px
-     * @param tickCount    the number of ticks on the bar
+     * @param ctx        the context
+     * @param x          the start x co-ordinate
+     * @param y          the y co-ordinate
+     * @param length     the length of the bar in px
+     * @param tickCount  the number of ticks on the bar
      * @param tickHeight the height of each tick
-     * @param tickColor    the color of each tick
-     * @param barWeight    the weight of the bar
-     * @param barColor     the color of the bar
+     * @param tickColor  the color of each tick
+     * @param barWeight  the weight of the bar
+     * @param barColor   the color of the bar
      */
     public Bar(Context ctx,
-            float x,
-            float y,
-            float length,
-            int tickCount,
-            float tickHeight,
-            int tickColor,
-            float barWeight,
-            int barColor) {
+               float x,
+               float y,
+               float length,
+               int tickCount,
+               float tickHeight,
+               float tickWidth,
+               int tickColor,
+               float barWeight,
+               int barColor) {
 
         mLeftX = x;
         mRightX = x + length;
@@ -75,6 +77,7 @@ public class Bar {
         mNumSegments = tickCount - 1;
         mTickDistance = length / mNumSegments;
         mTickHeight = tickHeight;
+        mTickWidth = tickWidth;
         // Initialize the paint.
         mBarPaint = new Paint();
         mBarPaint.setColor(barColor);
@@ -166,12 +169,15 @@ public class Bar {
     public void drawTicks(Canvas canvas) {
 
         // Loop through and draw each tick (except final tick).
-        for (int i = 0; i < mNumSegments; i++) {
+        for (int i = 1; i < mNumSegments; i++) {
             final float x = i * mTickDistance + mLeftX;
-            canvas.drawCircle(x, mY, mTickHeight, mTickPaint);
+            //canvas.drawCircle(x, mY, mTickHeight, mTickPaint);
+            // mTickPaint.setStrokeWidth(mTickWidth);
+            //canvas.drawRect(x + mTickHeight / 2, mY - mTickHeight / 2, x + mTickWidth, x + mTickHeight / 2, mTickPaint);
+            canvas.drawLine(x, mY - mTickHeight / 2, x, mY + mTickHeight / 2, mTickPaint);
         }
         // Draw final tick. We draw the final tick outside the loop to avoid any
         // rounding discrepancies.
-        canvas.drawCircle(mRightX, mY, mTickHeight, mTickPaint);
+        // canvas.drawCircle(mRightX, mY, mTickHeight, mTickPaint);
     }
 }
